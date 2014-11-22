@@ -17,7 +17,7 @@
             <!-- Preview: layout=@layout/row_devices -->
         </fragment>
         <fragment
-            class="com.example.android.wifidirect.DeviceDetailFragment"
+            class="com.example.android.wifidirect.MessageListFragment"
             android:id="@+id/frag_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
