@@ -19,5 +19,7 @@
     <string name="title_activity_message">MessageActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="label_connect">Connect</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ssid">Ssid</string>
 </resources>
