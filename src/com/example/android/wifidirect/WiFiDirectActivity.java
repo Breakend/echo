@@ -64,8 +64,6 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         this.isWifiP2pEnabled = isWifiP2pEnabled;
     }
 
-    
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -282,4 +280,5 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         }
 
     }
+    
 }
