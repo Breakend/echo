@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MessageActivity extends Activity {
-	public static String RECIPIENT_MAC = "";
+	public static AllEncompasingP2PClient RECIPIENT = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class MessageActivity extends Activity {
 		final Button button = (Button) findViewById(R.id.btn_send);
 		final TextView status = (TextView) findViewById(R.id.txt_status);
 		final EditText message = (EditText)findViewById(R.id.edit_message);
+		status.setText(RECIPIENT.getMac());
 		
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

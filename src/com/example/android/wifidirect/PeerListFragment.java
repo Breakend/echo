@@ -23,8 +23,8 @@ import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +39,9 @@ import android.widget.TextView;
  */
 public class PeerListFragment extends ListFragment {
 
-    private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-    ProgressDialog progressDialog = null;
-    View mContentView = null;      
+    private List<AllEncompasingP2PClient> peers = new ArrayList<AllEncompasingP2PClient>();
+    private ProgressDialog progressDialog = null;
+    private View mContentView = null;      
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -63,8 +63,10 @@ public class PeerListFragment extends ListFragment {
      */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
-        ((DeviceActionListener) getActivity()).showDetails(device);
+    	AllEncompasingP2PClient peer = (AllEncompasingP2PClient) getListAdapter().getItem(position);
+    	MessageActivity.RECIPIENT = peer;
+    	Intent intent = new Intent(this.mContentView.getContext(), MessageActivity.class);
+    	startActivity(intent);
     }
 
     /**
@@ -142,7 +144,7 @@ public class PeerListFragment extends ListFragment {
      * events.
      */
     public interface DeviceActionListener {
-        void showDetails(WifiP2pDevice device);
+        void showDetails(AllEncompasingP2PClient peer);
         void cancelDisconnect();
         void connect(WifiP2pConfig config);
         void disconnect();

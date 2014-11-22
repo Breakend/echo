@@ -124,6 +124,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
         final Button button = (Button) findViewById(R.id.btn_switch);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+            	MessageActivity.RECIPIENT = new AllEncompasingP2PClient("123abc", "123456", "test", "me");
             	Intent i = new Intent(getApplicationContext(), MessageActivity.class);
             	startActivity(i);
             }
