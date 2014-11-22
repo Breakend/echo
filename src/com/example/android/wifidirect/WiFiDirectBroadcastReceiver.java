@@ -39,7 +39,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private Channel channel;
     private WiFiDirectActivity activity;
 
-    /**
+    /** 
      * @param manager WifiP2pManager system service
      * @param channel Wifi p2p channel
      * @param activity activity associated with the receiver
@@ -72,21 +72,23 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 activity.setIsWifiP2pEnabled(true);
                 
                 manager.createGroup(channel,  new ActionListener() {
-
+ 
                     @Override
                     public void onSuccess() {
+                    	 Log.d(WiFiDirectActivity.TAG, "Group created");
                         // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
 //                        Toast.makeText(WiFiDirectActivity.this, "OMG you're a group owner.",
 //                                Toast.LENGTH_SHORT).show();
                     }
 
-                    @Override
+                    @Override 
                     public void onFailure(int reason) {
+                    	Log.d(WiFiDirectActivity.TAG, "Group failed");
 //                        Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
 //                                Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else {
+            } else { 
                 activity.setIsWifiP2pEnabled(false);
                 activity.resetData();
 

@@ -15,4 +15,7 @@
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="label_me">ME</string>
     <string name="label_peers">PEERS</string>
+    <string name="label_connect">Connect</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ssid">Ssid</string>
 </resources>
