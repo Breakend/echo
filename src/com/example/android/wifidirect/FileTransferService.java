@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Vector;
 
 import android.app.IntentService;
 import android.content.ContentResolver;
@@ -24,10 +25,12 @@ public class FileTransferService extends IntentService {
 
 	private static final int SOCKET_TIMEOUT = 5000;
 	public static final String ACTION_SEND_FILE = "com.example.android.wifidirect.SEND_FILE";
+	public static final String ACTION_SEND_HELLO = "com.example.android.wifidirect.SEND_HELLO";
 	public static final String EXTRAS_FILE_PATH = "file_url";
 	public static final String EXTRAS_ADDRESS = "go_host";
 	public static final String EXTRAS_PORT = "go_port";
 
+	//TODO: this isn't really file transfer anymore
 	public FileTransferService(String name) {
 		super(name);
 	}
@@ -80,7 +83,7 @@ public class FileTransferService extends IntentService {
 					}
 				}
 			}
-
 		}
+		
 	}
 }

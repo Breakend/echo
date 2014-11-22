@@ -61,14 +61,31 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
 
             // UI update to indicate wifi p2p status.
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+            
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
                 // Wifi Direct mode is enabled
                 activity.setIsWifiP2pEnabled(true);
                 
+                manager.createGroup(channel,  new ActionListener() {
+
+                    @Override
+                    public void onSuccess() {
+                        // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+//                        Toast.makeText(WiFiDirectActivity.this, "OMG you're a group owner.",
+//                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(int reason) {
+//                        Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
+//                                Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
                 activity.setIsWifiP2pEnabled(false);
                 activity.resetData();
@@ -111,6 +128,20 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     .findFragmentById(R.id.frag_list);
             fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+            
+            MeshNetworkManager.setSelf(new AllEncompasingP2PClient(((WifiP2pDevice) intent.getParcelableExtra(
+                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress, Configuration.GO_IP, ((WifiP2pDevice) intent.getParcelableExtra(
+                            WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceName, ((WifiP2pDevice) intent.getParcelableExtra(
+                                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress));
+            
+//            
+            if(!Receiver.running){
+    			Receiver r = new Receiver(this.activity);
+    			new Thread(r).start();
+    			Sender s = new Sender();
+    			new Thread(s).start();
+            }
+
             manager.requestGroupInfo(channel,
                     new WifiP2pManager.GroupInfoListener() {
                     @Override

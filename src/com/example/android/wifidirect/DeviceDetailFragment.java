@@ -52,7 +52,6 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
 	public static final String IP_SERVER = "192.168.49.1";
-	public static int PORT = 8988;
 	private static boolean server_running = false;
 
 	protected static final int CHOOSE_FILE_RESULT_CODE = 20;
@@ -144,7 +143,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
 		}
 
-		serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, PORT);
+		serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, Configuration.RECEIVE_PORT);
 		getActivity().startService(serviceIntent);
 	}
 
@@ -168,10 +167,10 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
 		mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
 
-		if (!server_running){
-			new ServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
-			server_running = true;
-		}
+//		if (!server_running){
+//			new ServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
+//			server_running = true;
+//		}
 
 		// hide the connect button
 		mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
@@ -230,7 +229,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				ServerSocket serverSocket = new ServerSocket(PORT);
+				ServerSocket serverSocket = new ServerSocket(Configuration.RECEIVE_PORT);
 				Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
 				Socket client = serverSocket.accept();
 				Log.d(WiFiDirectActivity.TAG, "Server: connection done");

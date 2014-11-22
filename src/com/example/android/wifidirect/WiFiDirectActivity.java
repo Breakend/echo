@@ -80,22 +80,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
-     
-        manager.createGroup(channel,  new ActionListener() {
 
-            @Override
-            public void onSuccess() {
-                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-                Toast.makeText(WiFiDirectActivity.this, "OMG you're a group owner.",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
@@ -142,6 +127,8 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	//TODO: here is where Wifi Discovery should go also, so you can see peers and Android Wifi 
+    	//hotspots to connect to
         switch (item.getItemId()) {
             case R.id.atn_direct_enable:
                 if (manager != null && channel != null) {
@@ -190,11 +177,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_detail);
         fragment.showDetails(device);
-
     }
 
     @Override
     public void connect(WifiP2pConfig config) {
+    	// TOOD: Here it should be like, if WiFi hotspot use the other connect method
+    	
         manager.connect(channel, config, new ActionListener() {
 
             @Override
@@ -212,6 +200,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
    
     @Override
     public void disconnect() {
+    	//TODO: again here it should also include the other wifi hotspot thing
         final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_detail);
         fragment.resetViews();
