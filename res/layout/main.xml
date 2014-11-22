@@ -4,24 +4,47 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical" >
+
         <fragment
-            class="com.example.android.wifidirect.DeviceListFragment"
             android:id="@+id/frag_list"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/phone_list_height">
+            android:layout_height="164dp"
+            class="com.example.android.wifidirect.DeviceListFragment" >
+
             <!-- Preview: layout=@layout/row_devices -->
         </fragment>
+
         <fragment
-            class="com.example.android.wifidirect.DeviceDetailFragment"
             android:id="@+id/frag_detail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="107dp"
+            class="com.example.android.wifidirect.DeviceDetailFragment" >
+
             <!-- Preview: layout=@layout/device_detail -->
         </fragment>
+
+        <fragment
+            android:id="@+id/frag_peers"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            class="com.example.android.wifidirect.PeerListFragment" >
+
+            <!-- Preview: layout=@layout/device_detail -->
+        </fragment>
+
+        <Button
+            android:id="@+id/btn_switch"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button" />
     </LinearLayout>
+
 </LinearLayout>
