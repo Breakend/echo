@@ -16,6 +16,7 @@
 
 package com.example.android.wifidirect;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -160,6 +161,10 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		view.setText(getResources().getString(R.string.group_owner_text)
 				+ ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
 						: getResources().getString(R.string.no)));
+		
+		if(!info.isGroupOwner){
+			Sender.queuePacket(new Packet(Packet.TYPE.HELLO, new byte[0], null, WiFiDirectBroadcastReceiver.MAC));
+		}
 
 		// InetAddress from WifiP2pInfo struct.
 		view = (TextView) mContentView.findViewById(R.id.device_info);

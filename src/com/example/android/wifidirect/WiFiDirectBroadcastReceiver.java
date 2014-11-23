@@ -37,6 +37,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private Channel channel;
     private WiFiDirectActivity activity;
 
+    public static String MAC;
+    
     /** 
      * @param manager WifiP2pManager system service
      * @param channel Wifi p2p channel
@@ -73,7 +75,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
  
                     @Override
                     public void onSuccess() {
-                    	 Log.d(WiFiDirectActivity.TAG, "Group created");
+                    	 Log.d(WiFiDirectActivity.TAG, "P2P Group created");
                         // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
 //                        Toast.makeText(WiFiDirectActivity.this, "OMG you're a group owner.",
 //                                Toast.LENGTH_SHORT).show();
@@ -81,7 +83,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
                     @Override 
                     public void onFailure(int reason) {
-                    	Log.d(WiFiDirectActivity.TAG, "Group failed");
+                    	Log.d(WiFiDirectActivity.TAG, "P2P Group failed");
 //                        Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
 //                                Toast.LENGTH_SHORT).show();
                     }
@@ -91,7 +93,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 activity.resetData();
 
             }
-            Log.d(WiFiDirectActivity.TAG, "P2P state changed - " + state);
+            //Log.d(WiFiDirectActivity.TAG, "P2P state changed - " + state);
+            Log.d(WiFiDirectActivity.TAG, "P2PACTION : WIFI_P2P_STATE_CHANGED_ACTION state = " + state);
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
             // request available peers from the wifi p2p manager. This is an
@@ -101,7 +104,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 manager.requestPeers(channel, (PeerListListener) activity.getFragmentManager()
                         .findFragmentById(R.id.frag_list));
             }
-            Log.d(WiFiDirectActivity.TAG, "P2P peers changed");
+            Log.d(WiFiDirectActivity.TAG, "P2PACTION : WIFI_P2P_PEERS_CHANGED_ACTION");
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
             if (manager == null) {
@@ -121,6 +124,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 manager.requestConnectionInfo(channel, fragment);
             } else {
                 // It's a disconnect
+            	 Log.d(WiFiDirectActivity.TAG, "P2PACTION : WIFI_P2P_CONNECTION_CHANGED_ACTION -- DISCONNECT");
                 activity.resetData();
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
@@ -129,13 +133,16 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
             
+            MAC = ((WifiP2pDevice) intent.getParcelableExtra(
+                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress;
+            
             MeshNetworkManager.setSelf(new AllEncompasingP2PClient(((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress, Configuration.GO_IP, ((WifiP2pDevice) intent.getParcelableExtra(
                             WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceName, ((WifiP2pDevice) intent.getParcelableExtra(
                                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress));
             
-//            
-            if(!Receiver.running){
+            
+            if (!Receiver.running){
     			Receiver r = new Receiver(this.activity);
     			new Thread(r).start();
     			Sender s = new Sender();
@@ -151,7 +158,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             String ssid = group.getNetworkName();
                             String passphrase = group.getPassphrase();
                             
-                            Log.d(WiFiDirectActivity.TAG, "SSID : " + ssid + "\n Passphrase : " + passphrase);
+                            Log.d(WiFiDirectActivity.TAG, "GROUP INFO AVALABLE");
+                            Log.d(WiFiDirectActivity.TAG, " SSID : " + ssid + "\n Passphrase : " + passphrase);
 
                         }
                     }

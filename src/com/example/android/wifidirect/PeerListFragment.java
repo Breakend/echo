@@ -129,8 +129,8 @@ public class PeerListFragment extends ListFragment {
          peers.clear();
          peers.addAll(newPeers);
          ((PeersListAdapter) getListAdapter()).notifyDataSetChanged();
-    }
-    /**
+    }  
+    /** 
      * 
      */
     public void onInitiateDiscovery() {

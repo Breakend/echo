@@ -67,7 +67,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	WiFiBroadcastReceiver receiverWifi;
 	private boolean isWifiConnected;
 	
-	private TextView message_view;
+	//private TextView message_view;
 	
 	public boolean isVisible = true;
 	
@@ -101,6 +101,8 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 		channel = manager.initialize(this, getMainLooper(), null);
 
+		
+		
 		/*
 		// Initiate wifi service manager
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);

@@ -51,8 +51,8 @@ public class Receiver implements Runnable {
 				//Send update to all nodes in your routing table
 				
 				// Update UI
-				PeerListFragment fragment = (PeerListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_peers);
-	            fragment.updatePeerList(new ArrayList<AllEncompasingP2PClient>(MeshNetworkManager.routingTable.values()));
+				//PeerListFragment fragment = (PeerListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_peers);
+	            //fragment.updatePeerList(new ArrayList<AllEncompasingP2PClient>(MeshNetworkManager.routingTable.values()));
 	            
 
 				//Send routing table back as HELLO_ACK

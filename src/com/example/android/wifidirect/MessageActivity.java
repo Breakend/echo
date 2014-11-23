@@ -1,5 +1,6 @@
 package com.example.android.wifidirect;
 
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,10 +30,18 @@ public class MessageActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	//status.setText(message.getText().toString());
-            	addMessage("This phone",message.getText().toString());
+            	String msgStr = message.getText().toString();
+            	addMessage("This phone",msgStr);
             	message.setText("");
+            	
+            	// Send to other clients 
+            	for(AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()){
+    				if(c.getMac().equals(MeshNetworkManager.getSelf().getMac())) continue;
+    				Sender.queuePacket(new Packet(Packet.TYPE.MESSAGE, msgStr.getBytes(), c.getMac(), WiFiDirectBroadcastReceiver.MAC));
+    			}
+            	
             }
-        });
+        }); 
 	}
 	
 	public static void addMessage(String from, String text) {
