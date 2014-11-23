@@ -1,7 +1,10 @@
 package com.example.android.wifidirect;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.widget.Toast;
 
 public class Receiver implements Runnable {
@@ -44,8 +47,13 @@ public class Receiver implements Runnable {
 				}
 
 				MeshNetworkManager.routingTable.put(p.getSenderMac(), new AllEncompasingP2PClient(p.getSenderMac(), p.getSenderIP(), p.getSenderMac(), MeshNetworkManager.getSelf().getMac()));
+				
 				//Send update to all nodes in your routing table
-
+				
+				// Update UI
+				PeerListFragment fragment = (PeerListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_peers);
+	            fragment.updatePeerList(new ArrayList<AllEncompasingP2PClient>(MeshNetworkManager.routingTable.values()));
+	            
 
 				//Send routing table back as HELLO_ACK
 				byte[] rtable = MeshNetworkManager.serializeRoutingTable();

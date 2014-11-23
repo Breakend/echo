@@ -121,7 +121,15 @@ public class PeerListFragment extends ListFragment {
         peers.clear();
         ((PeersListAdapter) getListAdapter()).notifyDataSetChanged();
     }
-
+    
+    public void updatePeerList(List<AllEncompasingP2PClient> newPeers){
+    	 if (progressDialog != null && progressDialog.isShowing()) {
+             progressDialog.dismiss();
+         }
+         peers.clear();
+         peers.addAll(newPeers);
+         ((PeersListAdapter) getListAdapter()).notifyDataSetChanged();
+    }
     /**
      * 
      */
