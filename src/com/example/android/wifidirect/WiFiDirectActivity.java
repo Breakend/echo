@@ -37,6 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
@@ -65,7 +66,11 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	WifiManager wifiManager;
 	WiFiBroadcastReceiver receiverWifi;
 	private boolean isWifiConnected;
-
+	
+	private TextView message_view;
+	
+	public boolean isVisible = true;
+	
 	/**
 	 * @param isWifiP2pEnabled
 	 *            the isWifiP2pEnabled to set
@@ -78,7 +83,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+	
+		// Message View
+		//message_view = (TextView) findViewById(R.id.message_view);
+		
+		//message_view.setText(message_view.getText() + "HI " );
+		
 		// add necessary intent values to be matched.
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -91,6 +101,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 		channel = manager.initialize(this, getMainLooper(), null);
 
+		/*
 		// Initiate wifi service manager
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
@@ -118,7 +129,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		registerReceiver(receiverWifi, wifiIntentFilter);
 		// wifiManager.startScan();
 		this.connectToAccessPoint("DIRECT-Sq-Android_ca89", "c5umx0mw");
-
+		*/
 		// connectToAccessPoint(String ssid, String passphrase)
 		
         final Button button = (Button) findViewById(R.id.btn_switch);
@@ -127,6 +138,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
             	MessageActivity.RECIPIENT = new AllEncompasingP2PClient("123abc", "123456", "test", "me");
             	Intent i = new Intent(getApplicationContext(), MessageActivity.class);
             	startActivity(i);
+            	
             }
         });
 
@@ -138,12 +150,14 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		super.onResume();
 		receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
 		registerReceiver(receiver, intentFilter);
+		this.isVisible = true;
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		unregisterReceiver(receiver);
+		this.isVisible = false;
 	}
 
 	/**
@@ -329,6 +343,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		}
 
 	}
+
 
 	public void displayConnectDialog(String ssid) {
 

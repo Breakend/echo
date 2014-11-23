@@ -42,9 +42,9 @@
         <Button
             android:id="@+id/btn_switch"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Group Chat" />
     </LinearLayout>
 
 </LinearLayout>

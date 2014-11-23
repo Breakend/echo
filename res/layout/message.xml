@@ -4,43 +4,44 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <!--
     <ListView
         android:id="@+id/list_message"
         android:layout_width="match_parent"
         android:layout_height="396dp" >
-
     </ListView>
+    -->
 
-    <GridLayout
+    <TextView
+        android:id="@+id/message_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="1" >
+        android:layout_height="0dp"
+        android:layout_weight="1.00"
+        android:scrollbars="vertical"
+        android:text="" >
+    </TextView>
 
-        <EditText
-            android:id="@+id/edit_message"
-            android:layout_width="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:ems="10" >
+    <EditText
+        android:id="@+id/edit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="" >
 
-            <requestFocus />
-        </EditText>
+        <requestFocus />
+    </EditText>
 
-        <Button
-            android:id="@+id/btn_send"
-            android:layout_column="0"
-            android:layout_gravity="right|center_vertical"
-            android:layout_row="0"
-            android:text="Send" />
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="Send" />
 
-        <TextView
-            android:id="@+id/txt_status"
-            android:layout_column="0"
-            android:layout_gravity="left|bottom"
-            android:layout_row="0"
-            android:text="" />
-
-    </GridLayout>
+   <!--  <TextView
+        android:id="@+id/txt_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="" /> -->
 
 </LinearLayout>

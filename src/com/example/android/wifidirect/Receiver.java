@@ -71,13 +71,24 @@ public class Receiver implements Runnable {
 					}
 					else if(p.getType().equals(Packet.TYPE.MESSAGE)){
 						final String message =  p.getSenderMac() + " says:\n" + new String(p.getData());
+						final String msg = new String(p.getData());
+						final String name = p.getSenderMac();
+						
 						activity.runOnUiThread(new Runnable() {
 
 					        @Override
 					        public void run() {
-					            Toast.makeText(activity,message, Toast.LENGTH_LONG).show();
+					            if (activity.isVisible) {
+					            	Toast.makeText(activity,message, Toast.LENGTH_LONG).show();
+					            } else {
+					            	MessageActivity.addMessage(name, msg);
+					            }
 					        }
+					        
 					    });
+						
+						
+						
 //						Toast.makeText(activity, p.getSenderMac() + " says:\n" + new String(p.getData()), Toast.LENGTH_LONG).show();
 //						System.out.println("GOT MESSAGE");
 //						System.out.println("Message: " + new String(p.getData()));
