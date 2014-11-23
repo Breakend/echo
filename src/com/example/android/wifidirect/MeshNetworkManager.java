@@ -3,6 +3,9 @@ package com.example.android.wifidirect;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pManager;
+
 public class MeshNetworkManager {
 	/**
 	 * Your routing table
