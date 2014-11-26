@@ -104,19 +104,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 					}
 				});
 
-		mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
-				new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// Allow user to pick an image from Gallery or other
-						// registered apps
-						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-						intent.setType("image/*");
-						startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-					}
-				});
-
 		return mContentView;
 	}
 
@@ -170,8 +157,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		view = (TextView) mContentView.findViewById(R.id.device_info);
 		view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
 
-		mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
-
 //		if (!server_running){
 //			new ServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
 //			server_running = true;
@@ -209,7 +194,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		view.setText(R.string.empty);
 		view = (TextView) mContentView.findViewById(R.id.status_text);
 		view.setText(R.string.empty);
-		mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
 		this.getView().setVisibility(View.GONE);
 	}
 

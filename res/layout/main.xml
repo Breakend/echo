@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+    <fragment
+        android:id="@+id/frag_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="164dp"
+        class="com.example.android.wifidirect.DeviceListFragment" >
 
-        <fragment
-            android:id="@+id/frag_list"
-            android:layout_width="match_parent"
-            android:layout_height="164dp"
-            class="com.example.android.wifidirect.DeviceListFragment" >
+        <!-- Preview: layout=@layout/row_devices -->
+    </fragment>
 
-            <!-- Preview: layout=@layout/row_devices -->
-        </fragment>
+    <fragment
+        android:id="@+id/frag_detail"
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        class="com.example.android.wifidirect.DeviceDetailFragment" >
 
-        <fragment
-            android:id="@+id/frag_detail"
-            android:layout_width="match_parent"
-            android:layout_height="107dp"
-            class="com.example.android.wifidirect.DeviceDetailFragment" >
+        <!-- Preview: layout=@layout/device_detail -->
+    </fragment>
 
-            <!-- Preview: layout=@layout/device_detail -->
-        </fragment>
+    <fragment
+        android:id="@+id/frag_peers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        class="com.example.android.wifidirect.PeerListFragment" >
 
-        <fragment
-            android:id="@+id/frag_peers"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_weight="1"
-            class="com.example.android.wifidirect.PeerListFragment" >
+        <!-- Preview: layout=@layout/device_detail -->
+    </fragment>
 
-            <!-- Preview: layout=@layout/device_detail -->
-        </fragment>
-
-        <Button
-            android:id="@+id/btn_switch"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Group Chat" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btn_switch"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/group_chat" />
 
 </LinearLayout>
