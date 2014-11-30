@@ -24,9 +24,12 @@ public class TcpSender {
 			/*
 			 * If can't connect assume that they left the chat and remove them 
 			 */
-			System.out.println("eXception");
+			System.out.println("eXception removing: " + data.getMac());
 			MeshNetworkManager.routingTable.remove(data.getMac());
+			Receiver.somebodyLeft(data.getMac());
+			Receiver.updatePeerList();
 			e.printStackTrace();
+			return false;
 		}
 
 		OutputStream os = null;
@@ -40,6 +43,8 @@ public class TcpSender {
 		} catch (Exception e) {
 			System.out.println("eXception");
 			MeshNetworkManager.routingTable.remove(data.getMac());
+			Receiver.somebodyLeft(data.getMac());
+			Receiver.updatePeerList();
 			e.printStackTrace();
 		}
 		

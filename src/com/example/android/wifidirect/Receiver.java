@@ -10,7 +10,7 @@ import android.widget.Toast;
 public class Receiver implements Runnable {
 
 	public static boolean running = false;
-	WiFiDirectActivity activity;
+	static WiFiDirectActivity activity;
 	
 	public Receiver(WiFiDirectActivity a) {
 		this.activity = a;
@@ -54,34 +54,23 @@ public class Receiver implements Runnable {
 				//PeerListFragment fragment = (PeerListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_peers);
 	            //fragment.updatePeerList(new ArrayList<AllEncompasingP2PClient>(MeshNetworkManager.routingTable.values()));
 	            
-				activity.runOnUiThread(new Runnable(){
-			        @Override
-			        public void run() {
-			            DeviceDetailFragment.updateGroupChatMembersMessage();
-			        }
-			        
-				});
 				//Send routing table back as HELLO_ACK
 				byte[] rtable = MeshNetworkManager.serializeRoutingTable();
 
 				
 				Packet ack = new Packet(Packet.TYPE.HELLO_ACK, rtable, p.getSenderMac(), MeshNetworkManager.getSelf().getMac());
 				Sender.queuePacket(ack);
-				System.out.println("GOT HELLO");
-			}
+				somebodyJoined(p.getSenderMac());
+				updatePeerList();
+ 			}
 			else{
 			//If you're the intendeded target for a non hello message
 			if(p.getMac().equals(MeshNetworkManager.getSelf().getMac())){
 					if(p.getType().equals(Packet.TYPE.HELLO_ACK)){
 						MeshNetworkManager.deserializeRoutingTableAndAdd(p.getData());
 						MeshNetworkManager.getSelf().setGroupOwnerMac(p.getSenderMac());
-						activity.runOnUiThread(new Runnable(){
-					        @Override
-					        public void run() {
-					            DeviceDetailFragment.updateGroupChatMembersMessage();
-					        }
-					        
-						});
+						somebodyJoined(p.getSenderMac());
+						updatePeerList();
 					}
 					else if(p.getType().equals(Packet.TYPE.UPDATE)){
 						String emb_mac = Packet.getMacBytesAsString(p.getData(), 0);
@@ -100,13 +89,8 @@ public class Receiver implements Runnable {
 					            }
 					        }
 					    });
-						activity.runOnUiThread(new Runnable(){
-					        @Override
-					        public void run() {
-					            DeviceDetailFragment.updateGroupChatMembersMessage();
-					        }
-					        
-						});
+						updatePeerList();
+
 					}
 					else if(p.getType().equals(Packet.TYPE.MESSAGE)){
 						final String message =  p.getSenderMac() + " says:\n" + new String(p.getData());
@@ -133,13 +117,7 @@ public class Receiver implements Runnable {
 					            }
 					        } 
 					    });
-						activity.runOnUiThread(new Runnable(){
-					        @Override
-					        public void run() {
-					            DeviceDetailFragment.updateGroupChatMembersMessage();
-					        }
-					        
-						});
+						updatePeerList();
 					}
 				}
 				else{
@@ -157,6 +135,55 @@ public class Receiver implements Runnable {
 
 
 		}
+	}
+	
+	public static void somebodyJoined(String smac){
+		
+		final String message;
+		final String msg;
+		message = msg = smac + " has joined.";
+		final String name = smac;
+		activity.runOnUiThread(new Runnable() {
+
+	        @Override
+	        public void run() {
+	            if (activity.isVisible) {
+	            	Toast.makeText(activity,message, Toast.LENGTH_LONG).show();
+	            } else {
+	            	MessageActivity.addMessage(name, msg);
+	            }
+	        } 
+	    });
+	}
+	
+	public static void somebodyLeft(String smac){
+		
+		final String message;
+		final String msg;
+		message = msg = smac + " has left.";
+		final String name = smac;
+		activity.runOnUiThread(new Runnable() {
+
+	        @Override
+	        public void run() {
+	            if (activity.isVisible) {
+	            	Toast.makeText(activity,message, Toast.LENGTH_LONG).show();
+	            } else {
+	            	MessageActivity.addMessage(name, msg);
+	            }
+	        } 
+	    });
+	}
+	
+	public static void updatePeerList(){
+		if(activity == null) return;
+		activity.runOnUiThread(new Runnable(){
+	        @Override
+	        public void run() {
+	            DeviceDetailFragment.updateGroupChatMembersMessage();
+	        }
+	        
+		});
 	}
 
 }

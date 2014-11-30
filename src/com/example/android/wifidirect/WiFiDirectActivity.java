@@ -98,35 +98,37 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 		
 		
-		/*
-		// Initiate wifi service manager
-		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		if(Configuration.isDeviceBridgingEnabled){
+			// Initiate wifi service manager
+			wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+	
+			// Check for wifi is disabled
+			if (wifiManager.isWifiEnabled() == false) {
+				// If wifi disabled then enable it
+				Toast.makeText(getApplicationContext(),
+						"wifi is disabled..making it enabled", Toast.LENGTH_LONG)
+						.show(); 
+				wifiManager.setWifiEnabled(true);
+			}
+	
+			// wifi scaned value broadcast receiver
+			receiverWifi = new WiFiBroadcastReceiver(wifiManager, this,
+					this.isWifiConnected);
+	
+			// Register broadcast receiver
+			// Broacast receiver will automatically call when number of wifi
+			// connections changed
+			wifiIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+			wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+			wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+	
+			registerReceiver(receiverWifi, wifiIntentFilter);
 
-		// Check for wifi is disabled
-		if (wifiManager.isWifiEnabled() == false) {
-			// If wifi disabled then enable it
-			Toast.makeText(getApplicationContext(),
-					"wifi is disabled..making it enabled", Toast.LENGTH_LONG)
-					.show(); 
-			wifiManager.setWifiEnabled(true);
+			/*
+			 * This shouldn't be hard coded, but for our purposes we wanted to demonstrate bridging.
+			 */
+			this.connectToAccessPoint("DIRECT-Sq-Android_ca89", "c5umx0mw");
 		}
-
-		// wifi scaned value broadcast receiver
-		receiverWifi = new WiFiBroadcastReceiver(wifiManager, this,
-				this.isWifiConnected);
-
-		// Register broadcast receiver
-		// Broacast receiver will automatically call when number of wifi
-		// connections changed
-		wifiIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-		// wifiIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-
-		registerReceiver(receiverWifi, wifiIntentFilter);
-		// wifiManager.startScan();
-		this.connectToAccessPoint("DIRECT-Sq-Android_ca89", "c5umx0mw");
-		*/
 		// connectToAccessPoint(String ssid, String passphrase)
 		
         final Button button = (Button) findViewById(R.id.btn_switch);
@@ -206,6 +208,8 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 		case R.id.atn_direct_discover:
 			if (!isWifiP2pEnabled) {
+				// If p2p not enabled try to connect as a legacy device
+				wifiManager.startScan(); 
 				Toast.makeText(WiFiDirectActivity.this,
 						R.string.p2p_off_warning, Toast.LENGTH_SHORT).show();
 				return true;

@@ -119,7 +119,17 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
             Log.d("WiFiBroadcastReceiver", "	dhcpServer="+this.parseIpAddress(wifiManager.getDhcpInfo().serverAddress));
             Log.d("WiFiBroadcastReceiver", "	netmask="+this.parseIpAddress(wifiManager.getDhcpInfo().netmask));
             
-            
+            MeshNetworkManager.setSelf(new AllEncompasingP2PClient(wifiManager.getConnectionInfo().getMacAddress(), 
+            		Configuration.GO_IP, 
+            		wifiManager.getConnectionInfo().getMacAddress(), 
+            		wifiManager.getConnectionInfo().getMacAddress()));
+
+            if (!Receiver.running){
+            	Receiver r = new Receiver(this.activity);
+            	new Thread(r).start();
+            	Sender s = new Sender();
+            	new Thread(s).start();
+            	}
         }
         else if (aState == DetailedState.DISCONNECTING) {
             Log.d("WiFiBroadcastReceiver", "DISCONNECTING");
