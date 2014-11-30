@@ -17,7 +17,6 @@ public class Sender implements Runnable {
 	}
 	
 	public static boolean queuePacket(Packet p) {
-		System.out.println("ENQ A PACKET");
 		if(ccl == null)
 			ccl = new ConcurrentLinkedQueue<Packet>();
 		return ccl.add(p);
@@ -44,13 +43,8 @@ public class Sender implements Runnable {
 			
 			Packet p = ccl.remove();
 			String ip = MeshNetworkManager.getIPForClient(p.getMac());
-			packetSender.sendPacket(ip, Configuration.RECEIVE_PORT, p.serialize());
-			System.out.println("SENT A PACKET");
+			packetSender.sendPacket(ip, Configuration.RECEIVE_PORT, p);
 
-			//packetSender.sendTcpPacket(p);
-			// Need to check if a route exists
-			
-			//new Thread(new PacketSender(p)).start();
 		}
 	}
 	

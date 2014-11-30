@@ -47,6 +47,7 @@ public class MeshNetworkManager {
 		 */
 		if(self.getGroupOwnerMac() == c.getGroupOwnerMac()){
 			// share the same GO then just give its IP
+			System.out.println("Have the same group owner, sending to :" + c.getIp());
 			return c.getIp();
 		}
 		
@@ -108,6 +109,7 @@ public class MeshNetworkManager {
 		
 		AllEncompasingP2PClient c = routingTable.get(mac);
 		if(c == null){
+			System.out.println("NULL ENTRY in ROUTING TABLE FOR MAC");
 			return Configuration.GO_IP;
 		}
 		

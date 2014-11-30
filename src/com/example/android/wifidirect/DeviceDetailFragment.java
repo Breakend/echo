@@ -56,11 +56,23 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 	private static boolean server_running = false;
 
 	protected static final int CHOOSE_FILE_RESULT_CODE = 20;
-	private View mContentView = null;
+	private static View mContentView = null;
 	private WifiP2pDevice device;
 	private WifiP2pInfo info;
 	ProgressDialog progressDialog = null;
 
+	
+	public static void updateGroupChatMembersMessage(){
+		TextView view = (TextView) mContentView.findViewById(R.id.device_address);
+		if(view != null){
+			String s = "Currently in the network chatting: \n";
+			for(AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()){
+				s += c.getMac() + "\n";
+			}
+			view.setText(s);
+		}
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -82,13 +94,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				}
 				progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
 						"Connecting to :" + device.deviceAddress, true, true
-						//                        new DialogInterface.OnCancelListener() {
-						//
-						//                            @Override
-						//                            public void onCancel(DialogInterface dialog) {
-						//                                ((DeviceActionListener) getActivity()).cancelDisconnect();
-						//                            }
-						//                        }
 				);
 				((DeviceActionListener) getActivity()).connect(config);
 
@@ -121,18 +126,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
 		statusText.setText("Sending: " + uri);
 		Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
-		Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-		serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-		serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
-
-		if(localIP.equals(IP_SERVER)){
-			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, clientIP);
-		}else{
-			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
-		}
-
-		serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, Configuration.RECEIVE_PORT);
-		getActivity().startService(serviceIntent);
+//		Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+//		serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+//		serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
+//
+//		if(localIP.equals(IP_SERVER)){
+//			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, clientIP);
+//		}else{
+//			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
+//		}
+//
+//		serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, Configuration.RECEIVE_PORT);
+//		getActivity().startService(serviceIntent);
 	}
 
 	@Override
@@ -142,26 +147,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		}
 		this.info = info;
 		this.getView().setVisibility(View.VISIBLE);
-
-		// The owner IP is now known.
-		TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
-		view.setText(getResources().getString(R.string.group_owner_text)
-				+ ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
-						: getResources().getString(R.string.no)));
 		
 		if(!info.isGroupOwner){
 			Sender.queuePacket(new Packet(Packet.TYPE.HELLO, new byte[0], null, WiFiDirectBroadcastReceiver.MAC));
 		}
-
-		// InetAddress from WifiP2pInfo struct.
-		view = (TextView) mContentView.findViewById(R.id.device_info);
-		view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
-
-//		if (!server_running){
-//			new ServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
-//			server_running = true;
-//		}
-
+		
 		// hide the connect button
 		mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
 	}
@@ -175,10 +165,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		this.device = device;
 		this.getView().setVisibility(View.VISIBLE);
 		TextView view = (TextView) mContentView.findViewById(R.id.device_address);
-		view.setText(device.deviceAddress);
-		view = (TextView) mContentView.findViewById(R.id.device_info);
-		view.setText(device.toString());
-
+		String s = "Currently in the network chatting: \n";
+		for(AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()){
+			s += c.getMac() + "\n";
+		}
+		view.setText(s);
 	}
 
 	/**

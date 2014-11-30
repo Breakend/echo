@@ -84,11 +84,6 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 	
-		// Message View
-		//message_view = (TextView) findViewById(R.id.message_view);
-		
-		//message_view.setText(message_view.getText() + "HI " );
-		
 		// add necessary intent values to be matched.
 
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -137,7 +132,6 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
         final Button button = (Button) findViewById(R.id.btn_switch);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	MessageActivity.RECIPIENT = new AllEncompasingP2PClient("123abc", "123456", "test", "me");
             	Intent i = new Intent(getApplicationContext(), MessageActivity.class);
             	startActivity(i);
             	

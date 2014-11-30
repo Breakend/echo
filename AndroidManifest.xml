@@ -36,11 +36,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Used for transferring files  after a successful connection -->
-        <service
-            android:name=".FileTransferService"
-            android:enabled="true" />
-
         <activity
             android:name=".MessageActivity"
             android:label="@string/title_activity_message" >

@@ -76,16 +76,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     @Override
                     public void onSuccess() {
                     	 Log.d(WiFiDirectActivity.TAG, "P2P Group created");
-                        // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-//                        Toast.makeText(WiFiDirectActivity.this, "OMG you're a group owner.",
-//                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override 
                     public void onFailure(int reason) {
                     	Log.d(WiFiDirectActivity.TAG, "P2P Group failed");
-//                        Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
-//                                Toast.LENGTH_SHORT).show();
                     }
                 });
             } else { 
@@ -115,10 +110,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
             if (networkInfo.isConnected()) {
-
                 // we are connected with the other device, request connection
                 // info to find group owner IP
-
                 DeviceDetailFragment fragment = (DeviceDetailFragment) activity
                         .getFragmentManager().findFragmentById(R.id.frag_detail);
                 manager.requestConnectionInfo(channel, fragment);

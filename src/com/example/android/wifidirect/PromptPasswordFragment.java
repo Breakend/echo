@@ -1,5 +1,6 @@
 package com.example.android.wifidirect;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -13,18 +14,21 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+@SuppressLint("ValidFragment")
 public class PromptPasswordFragment extends DialogFragment {
 	
 	private WiFiDirectActivity activty;
 	private View mContentView;
 	private String ssid;
 	
+	public PromptPasswordFragment() {
+
+	}
+	
 	public PromptPasswordFragment(WiFiDirectActivity activty, String ssid) {
 		this.activty = activty;
 		this.ssid = ssid;
 	}
-	
-
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,10 +36,6 @@ public class PromptPasswordFragment extends DialogFragment {
 	    // Get the layout inflater
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 
-	    //TextView ssidLabel = (TextView)activty.findViewById(R.id.ssid);
-	    //if (ssidLabel != null) {
-	    	//ssidLabel.setText("Enter password for (" + this.ssid + ")");
-	    //} 
 	    mContentView = inflater.inflate(R.layout.prompt_password, null);
 	    ((TextView)mContentView.findViewById(R.id.ssid)).setText("Enter password for (" + this.ssid + ")");
 	    
@@ -50,8 +50,7 @@ public class PromptPasswordFragment extends DialogFragment {
 	            	   String ssid = PromptPasswordFragment.this.ssid;
 	            	   String password = ((TextView)PromptPasswordFragment.this.mContentView.findViewById(R.id.password))
 	            			   .getText().toString();
-	            	   //Log.d(WiFiDirectActivity.TAG, 
-	            		//	   "Button pressed SSID : " + ssid + "\n password : " + password);
+
 	            	   PromptPasswordFragment.this.activty.connectToAccessPoint(ssid, password);
 
 	               }

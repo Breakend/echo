@@ -54,33 +54,73 @@ public class Receiver implements Runnable {
 				//PeerListFragment fragment = (PeerListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_peers);
 	            //fragment.updatePeerList(new ArrayList<AllEncompasingP2PClient>(MeshNetworkManager.routingTable.values()));
 	            
-
+				activity.runOnUiThread(new Runnable(){
+			        @Override
+			        public void run() {
+			            DeviceDetailFragment.updateGroupChatMembersMessage();
+			        }
+			        
+				});
 				//Send routing table back as HELLO_ACK
 				byte[] rtable = MeshNetworkManager.serializeRoutingTable();
 
-
+				
 				Packet ack = new Packet(Packet.TYPE.HELLO_ACK, rtable, p.getSenderMac(), MeshNetworkManager.getSelf().getMac());
 				Sender.queuePacket(ack);
-//				System.out.println("GOT HELLO");
+				System.out.println("GOT HELLO");
 			}
 			else{
 			//If you're the intendeded target for a non hello message
 			if(p.getMac().equals(MeshNetworkManager.getSelf().getMac())){
-//				System.out.println("I am the intended recipient\n");
 					if(p.getType().equals(Packet.TYPE.HELLO_ACK)){
 						MeshNetworkManager.deserializeRoutingTableAndAdd(p.getData());
 						MeshNetworkManager.getSelf().setGroupOwnerMac(p.getSenderMac());
-//						System.out.println("GOT HELLO ACK!");
+						activity.runOnUiThread(new Runnable(){
+					        @Override
+					        public void run() {
+					            DeviceDetailFragment.updateGroupChatMembersMessage();
+					        }
+					        
+						});
 					}
 					else if(p.getType().equals(Packet.TYPE.UPDATE)){
-//						System.out.println("GOT UPDATE");
 						String emb_mac = Packet.getMacBytesAsString(p.getData(), 0);
 						MeshNetworkManager.routingTable.put(emb_mac, new AllEncompasingP2PClient(emb_mac, p.getSenderIP(), p.getMac(), MeshNetworkManager.getSelf().getMac()));
+						
+						final String message = emb_mac + " joined the conversation";
+						final String name = p.getSenderMac();
+						activity.runOnUiThread(new Runnable() {
+
+					        @Override
+					        public void run() {
+					            if (activity.isVisible) {
+					            	Toast.makeText(activity,message, Toast.LENGTH_LONG).show();
+					            } else {
+					            	MessageActivity.addMessage(name, message);
+					            }
+					        }
+					    });
+						activity.runOnUiThread(new Runnable(){
+					        @Override
+					        public void run() {
+					            DeviceDetailFragment.updateGroupChatMembersMessage();
+					        }
+					        
+						});
 					}
 					else if(p.getType().equals(Packet.TYPE.MESSAGE)){
 						final String message =  p.getSenderMac() + " says:\n" + new String(p.getData());
 						final String msg = new String(p.getData());
 						final String name = p.getSenderMac();
+						
+						if(!MeshNetworkManager.routingTable.contains(p.getSenderMac())){
+							/*
+							 * Update your routing table if for some reason this guy isn't in it
+							 */
+							MeshNetworkManager.routingTable.put(p.getSenderMac(), 
+									new AllEncompasingP2PClient(p.getSenderMac(),p.getSenderIP(), p.getSenderMac(), MeshNetworkManager.getSelf().getGroupOwnerMac())
+									);
+						}
 						
 						activity.runOnUiThread(new Runnable() {
 
@@ -91,24 +131,23 @@ public class Receiver implements Runnable {
 					            } else {
 					            	MessageActivity.addMessage(name, msg);
 					            }
+					        } 
+					    });
+						activity.runOnUiThread(new Runnable(){
+					        @Override
+					        public void run() {
+					            DeviceDetailFragment.updateGroupChatMembersMessage();
 					        }
 					        
-					    });
-						
-						
-						
-//						Toast.makeText(activity, p.getSenderMac() + " says:\n" + new String(p.getData()), Toast.LENGTH_LONG).show();
-//						System.out.println("GOT MESSAGE");
-//						System.out.println("Message: " + new String(p.getData()));
+						});
 					}
 				}
 				else{
 					//otherwise forward it 
-//					System.out.println("I (" + MeshNetworkManager.getSelf().getMac() +") am not the recipient ("+ p.getMac() +"). \n");
 					int ttl = p.getTtl();
+					//Have a ttl so that they don't bounce around forever
 					ttl--;
 					if(ttl > 0){
-//						System.out.println("RESENDING");
 						Sender.queuePacket(p);
 						p.setTtl(ttl);
 					}
