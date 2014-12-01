@@ -23,18 +23,6 @@
         <!-- Preview: layout=@layout/device_detail -->
     </fragment>
 
-    <!--
-    <fragment
-        android:id="@+id/frag_peers"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        class="com.example.android.wifidirect.PeerListFragment" >
-
-        Preview: layout=@layout/device_detail
-    </fragment>
-    -->
-
     <Button
         android:id="@+id/btn_switch"
         style="?android:attr/buttonStyleSmall"

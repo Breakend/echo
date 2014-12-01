@@ -4,14 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <!--
-    <ListView
-        android:id="@+id/list_message"
-        android:layout_width="match_parent"
-        android:layout_height="396dp" >
-    </ListView>
-    -->
-
     <TextView
         android:id="@+id/message_view"
         android:layout_width="match_parent"
@@ -37,11 +29,5 @@
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="Send" />
-
-   <!--  <TextView
-        android:id="@+id/txt_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" /> -->
 
 </LinearLayout>
