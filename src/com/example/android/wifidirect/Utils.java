@@ -19,9 +19,9 @@ public class Utils {
 		/*
 		 * method modified from:
 		 * 
-		 * http://www.flattermann.net/2011/02/android-howto-find-the-hardware-mac-address-of-a-remote-host/
-		 * 
-		 * */
+		 * http://www.flattermann.net/2011/02/android-howto-find-the-hardware-mac
+		 * -address-of-a-remote-host/
+		 */
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader("/proc/net/arp"));
@@ -32,7 +32,7 @@ public class Utils {
 				if (splitted != null && splitted.length >= 4) {
 					// Basic sanity check
 					String device = splitted[5];
-					if (device.matches(".*" +p2pInt+ ".*")){
+					if (device.matches(".*" + p2pInt + ".*")) {
 						String mac = splitted[3];
 						if (mac.matches(MAC)) {
 							return splitted[0];
@@ -52,14 +52,13 @@ public class Utils {
 		return null;
 	}
 
-
 	public static String getLocalIPAddress() {
 		/*
 		 * modified from:
 		 * 
-		 * http://thinkandroid.wordpress.com/2010/03/27/incorporating-socket-programming-into-your-applications/
-		 * 
-		 * */
+		 * http://thinkandroid.wordpress.com/2010/03/27/incorporating-socket-
+		 * programming-into-your-applications/
+		 */
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = en.nextElement();
@@ -67,8 +66,9 @@ public class Utils {
 					InetAddress inetAddress = enumIpAddr.nextElement();
 
 					String iface = intf.getName();
-					if(iface.matches(".*" +p2pInt+ ".*")){
-						if (inetAddress instanceof Inet4Address) { // fix for Galaxy Nexus. IPv4 is easy to use :-)
+					if (iface.matches(".*" + p2pInt + ".*")) {
+						if (inetAddress instanceof Inet4Address) { 
+							// fix for Galaxy Nexus IPv4 is easy to use
 							return getDottedDecimalIP(inetAddress.getAddress());
 						}
 					}
@@ -86,15 +86,15 @@ public class Utils {
 		/*
 		 * ripped from:
 		 * 
-		 * http://stackoverflow.com/questions/10053385/how-to-get-each-devices-ip-address-in-wifi-direct-scenario
-		 * 
-		 * */
+		 * http://stackoverflow.com/questions/10053385/how-to-get-each-devices-ip
+		 * -address-in-wifi-direct-scenario
+		 */
 		String ipAddrStr = "";
-		for (int i=0; i<ipAddr.length; i++) {
+		for (int i = 0; i < ipAddr.length; i++) {
 			if (i > 0) {
 				ipAddrStr += ".";
 			}
-			ipAddrStr += ipAddr[i]&0xFF;
+			ipAddrStr += ipAddr[i] & 0xFF;
 		}
 		return ipAddrStr;
 	}

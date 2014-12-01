@@ -16,7 +16,6 @@
 
 package com.example.android.wifidirect;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -53,26 +52,23 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
 	public static final String IP_SERVER = "192.168.49.1";
-	private static boolean server_running = false;
 
 	protected static final int CHOOSE_FILE_RESULT_CODE = 20;
 	private static View mContentView = null;
 	private WifiP2pDevice device;
-	private WifiP2pInfo info;
 	ProgressDialog progressDialog = null;
 
-	
-	public static void updateGroupChatMembersMessage(){
+	public static void updateGroupChatMembersMessage() {
 		TextView view = (TextView) mContentView.findViewById(R.id.device_address);
-		if(view != null){
+		if (view != null) {
 			String s = "Currently in the network chatting: \n";
-			for(AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()){
+			for (AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()) {
 				s += c.getMac() + "\n";
 			}
 			view.setText(s);
 		}
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -92,22 +88,20 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				if (progressDialog != null && progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}
-				progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
-						"Connecting to :" + device.deviceAddress, true, true
-				);
+				progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "Connecting to :"
+						+ device.deviceAddress, true, true);
 				((DeviceActionListener) getActivity()).connect(config);
 
 			}
 		});
 
-		mContentView.findViewById(R.id.btn_disconnect).setOnClickListener(
-				new View.OnClickListener() {
+		mContentView.findViewById(R.id.btn_disconnect).setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View v) {
-						((DeviceActionListener) getActivity()).disconnect();
-					}
-				});
+			@Override
+			public void onClick(View v) {
+				((DeviceActionListener) getActivity()).disconnect();
+			}
+		});
 
 		return mContentView;
 	}
@@ -115,10 +109,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		String localIP = Utils.getLocalIPAddress();
 		// Trick to find the ip in the file /proc/net/arp
-		String client_mac_fixed = new String(device.deviceAddress).replace("99", "19");
-		String clientIP = Utils.getIPFromMac(client_mac_fixed);
+		new String(device.deviceAddress).replace("99", "19"); // client mac fixed
 
 		// User has picked an image. Transfer it to group owner i.e peer using
 		// FileTransferService.
@@ -126,18 +118,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
 		statusText.setText("Sending: " + uri);
 		Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
-//		Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-//		serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-//		serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
-//
-//		if(localIP.equals(IP_SERVER)){
-//			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, clientIP);
-//		}else{
-//			serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
-//		}
-//
-//		serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, Configuration.RECEIVE_PORT);
-//		getActivity().startService(serviceIntent);
 	}
 
 	@Override
@@ -145,13 +125,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		if (progressDialog != null && progressDialog.isShowing()) {
 			progressDialog.dismiss();
 		}
-		this.info = info;
 		this.getView().setVisibility(View.VISIBLE);
-		
-		if(!info.isGroupOwner){
+
+		if (!info.isGroupOwner) {
 			Sender.queuePacket(new Packet(Packet.TYPE.HELLO, new byte[0], null, WiFiDirectBroadcastReceiver.MAC));
 		}
-		
+
 		// hide the connect button
 		mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
 	}
@@ -159,14 +138,15 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 	/**
 	 * Updates the UI with device data
 	 * 
-	 * @param device the device to be displayed
+	 * @param device
+	 *            the device to be displayed
 	 */
 	public void showDetails(WifiP2pDevice device) {
 		this.device = device;
 		this.getView().setVisibility(View.VISIBLE);
 		TextView view = (TextView) mContentView.findViewById(R.id.device_address);
 		String s = "Currently in the network chatting: \n";
-		for(AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()){
+		for (AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()) {
 			s += c.getMac() + "\n";
 		}
 		view.setText(s);
@@ -213,9 +193,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
 				Socket client = serverSocket.accept();
 				Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-				final File f = new File(Environment.getExternalStorageDirectory() + "/"
-						+ context.getPackageName() + "/wifip2pshared-" + System.currentTimeMillis()
-						+ ".jpg");
+				final File f = new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName()
+						+ "/wifip2pshared-" + System.currentTimeMillis() + ".jpg");
 
 				File dirs = new File(f.getParent());
 				if (!dirs.exists())
@@ -226,7 +205,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				InputStream inputstream = client.getInputStream();
 				copyFile(inputstream, new FileOutputStream(f));
 				serverSocket.close();
-				server_running = false;
 				return f.getAbsolutePath();
 			} catch (IOException e) {
 				Log.e(WiFiDirectActivity.TAG, e.getMessage());
@@ -236,6 +214,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override
@@ -247,11 +226,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				intent.setDataAndType(Uri.parse("file://" + result), "image/*");
 				context.startActivity(intent);
 			}
-
 		}
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		@Override

@@ -1,20 +1,18 @@
 package com.example.android.wifidirect;
 
-
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class TcpSender {
-	
+
 	Socket tcpSocket = null;
-	
+
 	public boolean sendPacket(String ip, int port, Packet data) {
-		
+
 		try {
-			System.out.println("IP: "+ ip);
+			System.out.println("IP: " + ip);
 			InetAddress serverAddr = InetAddress.getByName(ip);
 			tcpSocket = new Socket();
 			tcpSocket.bind(null);
@@ -22,7 +20,7 @@ public class TcpSender {
 
 		} catch (Exception e) {
 			/*
-			 * If can't connect assume that they left the chat and remove them 
+			 * If can't connect assume that they left the chat and remove them
 			 */
 			System.out.println("eXception removing: " + data.getMac());
 			MeshNetworkManager.routingTable.remove(data.getMac());
@@ -33,7 +31,7 @@ public class TcpSender {
 		}
 
 		OutputStream os = null;
-		
+
 		try {
 			os = tcpSocket.getOutputStream();
 			os.write(data.serialize());
@@ -47,8 +45,8 @@ public class TcpSender {
 			Receiver.updatePeerList();
 			e.printStackTrace();
 		}
-		
+
 		return true;
 	}
-	
+
 }

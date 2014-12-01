@@ -37,7 +37,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
@@ -50,8 +49,7 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
  * WiFi state related events.
  */
 
-public class WiFiDirectActivity extends Activity implements ChannelListener,
-		DeviceActionListener {
+public class WiFiDirectActivity extends Activity implements ChannelListener, DeviceActionListener {
 
 	public static final String TAG = "wifidirectdemo";
 	private WifiP2pManager manager;
@@ -66,11 +64,11 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	WifiManager wifiManager;
 	WiFiBroadcastReceiver receiverWifi;
 	private boolean isWifiConnected;
-	
-	//private TextView message_view;
-	
+
+	// private TextView message_view;
+
 	public boolean isVisible = true;
-	
+
 	/**
 	 * @param isWifiP2pEnabled
 	 *            the isWifiP2pEnabled to set
@@ -83,62 +81,55 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-	
-		// add necessary intent values to be matched.
 
+		// add necessary intent values to be matched.
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-		intentFilter
-				.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-		intentFilter
-				.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+		intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+		intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
 		manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 		channel = manager.initialize(this, getMainLooper(), null);
 
-		
-		
-		if(Configuration.isDeviceBridgingEnabled){
+		if (Configuration.isDeviceBridgingEnabled) {
 			// Initiate wifi service manager
 			wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-	
+
 			// Check for wifi is disabled
 			if (wifiManager.isWifiEnabled() == false) {
 				// If wifi disabled then enable it
-				Toast.makeText(getApplicationContext(),
-						"wifi is disabled..making it enabled", Toast.LENGTH_LONG)
-						.show(); 
+				Toast.makeText(getApplicationContext(), "wifi is disabled..making it enabled", Toast.LENGTH_LONG)
+						.show();
 				wifiManager.setWifiEnabled(true);
 			}
-	
+
 			// wifi scaned value broadcast receiver
-			receiverWifi = new WiFiBroadcastReceiver(wifiManager, this,
-					this.isWifiConnected);
-	
+			receiverWifi = new WiFiBroadcastReceiver(wifiManager, this, this.isWifiConnected);
+
 			// Register broadcast receiver
 			// Broacast receiver will automatically call when number of wifi
 			// connections changed
 			wifiIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 			wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 			wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-	
+
 			registerReceiver(receiverWifi, wifiIntentFilter);
 
 			/*
-			 * This shouldn't be hard coded, but for our purposes we wanted to demonstrate bridging.
+			 * This shouldn't be hard coded, but for our purposes we wanted to
+			 * demonstrate bridging.
 			 */
 			this.connectToAccessPoint("DIRECT-Sq-Android_ca89", "c5umx0mw");
+			// connectToAccessPoint(String ssid, String passphrase)
 		}
-		// connectToAccessPoint(String ssid, String passphrase)
-		
-        final Button button = (Button) findViewById(R.id.btn_switch);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	Intent i = new Intent(getApplicationContext(), MessageActivity.class);
-            	startActivity(i);
-            	
-            }
-        });
+
+		final Button button = (Button) findViewById(R.id.btn_switch);
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), MessageActivity.class);
+				startActivity(i);
+			}
+		});
 
 	}
 
@@ -163,10 +154,9 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	 * BroadcastReceiver receiving a state change event.
 	 */
 	public void resetData() {
-		DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager()
-				.findFragmentById(R.id.frag_list);
-		DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager()
-				.findFragmentById(R.id.frag_detail);
+		DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
+		DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager().findFragmentById(
+				R.id.frag_detail);
 		if (fragmentList != null) {
 			fragmentList.clearPeers();
 		}
@@ -190,8 +180,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO: here is where Wifi Discovery should go also, so you can see
-		// peers and Android Wifi
-		// hotspots to connect to
+		// peers and Android Wifi hotspots to connect to
 		switch (item.getItemId()) {
 		case R.id.atn_direct_enable:
 			if (manager != null && channel != null) {
@@ -209,27 +198,24 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		case R.id.atn_direct_discover:
 			if (!isWifiP2pEnabled) {
 				// If p2p not enabled try to connect as a legacy device
-				wifiManager.startScan(); 
-				Toast.makeText(WiFiDirectActivity.this,
-						R.string.p2p_off_warning, Toast.LENGTH_SHORT).show();
+				wifiManager.startScan();
+				Toast.makeText(WiFiDirectActivity.this, R.string.p2p_off_warning, Toast.LENGTH_SHORT).show();
 				return true;
 			}
-			final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
-					.findFragmentById(R.id.frag_list);
+			final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(
+					R.id.frag_list);
 			fragment.onInitiateDiscovery();
 			manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
 
 				@Override
 				public void onSuccess() {
-					Toast.makeText(WiFiDirectActivity.this,
-							"Discovery Initiated", Toast.LENGTH_SHORT).show();
+					Toast.makeText(WiFiDirectActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
 				public void onFailure(int reasonCode) {
-					Toast.makeText(WiFiDirectActivity.this,
-							"Discovery Failed : " + reasonCode,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(WiFiDirectActivity.this, "Discovery Failed : " + reasonCode, Toast.LENGTH_SHORT)
+							.show();
 				}
 			});
 			return true;
@@ -240,8 +226,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 	@Override
 	public void showDetails(WifiP2pDevice device) {
-		DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
-				.findFragmentById(R.id.frag_detail);
+		DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
 		fragment.showDetails(device);
 	}
 
@@ -259,8 +244,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 			@Override
 			public void onFailure(int reason) {
-				Toast.makeText(WiFiDirectActivity.this,
-						"Connect failed. Retry.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -268,8 +252,8 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	@Override
 	public void disconnect() {
 		// TODO: again here it should also include the other wifi hotspot thing
-		final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
-				.findFragmentById(R.id.frag_detail);
+		final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(
+				R.id.frag_detail);
 		fragment.resetViews();
 		manager.removeGroup(channel, new ActionListener() {
 
@@ -291,15 +275,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 	public void onChannelDisconnected() {
 		// we will try once more
 		if (manager != null && !retryChannel) {
-			Toast.makeText(this, "Channel lost. Trying again",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Channel lost. Trying again", Toast.LENGTH_LONG).show();
 			resetData();
 			retryChannel = true;
 			manager.initialize(this, getMainLooper(), this);
 		} else {
-			Toast.makeText(
-					this,
-					"Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
+			Toast.makeText(this, "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
 					Toast.LENGTH_LONG).show();
 		}
 	}
@@ -313,10 +294,9 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		 * request
 		 */
 		if (manager != null) {
-			final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
-					.findFragmentById(R.id.frag_list);
-			if (fragment.getDevice() == null
-					|| fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
+			final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(
+					R.id.frag_list);
+			if (fragment.getDevice() == null || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
 				disconnect();
 			} else if (fragment.getDevice().status == WifiP2pDevice.AVAILABLE
 					|| fragment.getDevice().status == WifiP2pDevice.INVITED) {
@@ -325,25 +305,19 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 					@Override
 					public void onSuccess() {
-						Toast.makeText(WiFiDirectActivity.this,
-								"Aborting connection", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(WiFiDirectActivity.this, "Aborting connection", Toast.LENGTH_SHORT).show();
 					}
 
 					@Override
 					public void onFailure(int reasonCode) {
-						Toast.makeText(
-								WiFiDirectActivity.this,
-								"Connect abort request failed. Reason Code: "
-										+ reasonCode, Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(WiFiDirectActivity.this,
+								"Connect abort request failed. Reason Code: " + reasonCode, Toast.LENGTH_SHORT).show();
 					}
 				});
 			}
 		}
 
 	}
-
 
 	public void displayConnectDialog(String ssid) {
 
@@ -354,13 +328,8 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 
 	public void connectToAccessPoint(String ssid, String passphrase) {
 
-		Log.d(WiFiDirectActivity.TAG, "Trying to connect to AP : (" + ssid
-				+ "," + passphrase + ")");
+		Log.d(WiFiDirectActivity.TAG, "Trying to connect to AP : (" + ssid + "," + passphrase + ")");
 
-		// WifiManager wifiManager = (WifiManager)
-		// getSystemService(Context.WIFI_SERVICE);
-		// setup a wifi configuration
-		//wifiManager.disconnect();
 		WifiConfiguration wc = new WifiConfiguration();
 		wc.SSID = "\"" + ssid + "\"";
 		wc.preSharedKey = "\"" + passphrase + "\""; // "\""+passphrase+"\"";
@@ -376,27 +345,19 @@ public class WiFiDirectActivity extends Activity implements ChannelListener,
 		wifiManager.enableNetwork(netId, true);
 		wifiManager.setWifiEnabled(true);
 
-		Log.d(WiFiDirectActivity.TAG, "Connected? ip = "
-				+ wifiManager.getConnectionInfo().getIpAddress());
-		Log.d(WiFiDirectActivity.TAG, "Connected? bssid = "
-				+ wifiManager.getConnectionInfo().getBSSID());
-		Log.d(WiFiDirectActivity.TAG, "Connected? ssid = "
-				+ wifiManager.getConnectionInfo().getSSID());
+		Log.d(WiFiDirectActivity.TAG, "Connected? ip = " + wifiManager.getConnectionInfo().getIpAddress());
+		Log.d(WiFiDirectActivity.TAG, "Connected? bssid = " + wifiManager.getConnectionInfo().getBSSID());
+		Log.d(WiFiDirectActivity.TAG, "Connected? ssid = " + wifiManager.getConnectionInfo().getSSID());
 
 		if (wifiManager.getConnectionInfo().getIpAddress() != 0) {
 			this.isWifiConnected = true;
-			Toast.makeText(
-					this,
-					"Connected!!! ip = "
-							+ wifiManager.getConnectionInfo().getIpAddress(),
+			Toast.makeText(this, "Connected!!! ip = " + wifiManager.getConnectionInfo().getIpAddress(),
 					Toast.LENGTH_LONG).show();
 		} else {
 			Toast.makeText(
 					this,
-					"WiFi AP connection failed... ip = "
-							+ wifiManager.getConnectionInfo().getIpAddress()
-							+ "(" + ssid + "," + passphrase + ")",
-					Toast.LENGTH_LONG).show();
+					"WiFi AP connection failed... ip = " + wifiManager.getConnectionInfo().getIpAddress() + "(" + ssid
+							+ "," + passphrase + ")", Toast.LENGTH_LONG).show();
 		}
 
 	}
