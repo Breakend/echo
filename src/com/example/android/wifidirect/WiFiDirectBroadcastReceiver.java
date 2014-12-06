@@ -54,11 +54,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 		this.activity = activity;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
-	 * android.content.Intent)
+	/**
+	 * State transitions based on connection and state information, callback based on P2P library
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -128,11 +125,13 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
 			MAC = ((WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress;
 
+			//Set yourself on connection
 			MeshNetworkManager.setSelf(new AllEncompasingP2PClient(((WifiP2pDevice) intent
 					.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress, Configuration.GO_IP,
 					((WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceName,
 					((WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).deviceAddress));
 
+			//Launch receiver and sender once connected to someone
 			if (!Receiver.running) {
 				Receiver r = new Receiver(this.activity);
 				new Thread(r).start();

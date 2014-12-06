@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.wifidirect;
 
 import android.app.Activity;
@@ -47,8 +31,9 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
  * using interfaces to notify the application of operation success or failure.
  * The application should also register a BroadcastReceiver for notification of
  * WiFi state related events.
+ * 
+ * Note: much of this is taken from the Wi-Fi P2P example 
  */
-
 public class WiFiDirectActivity extends Activity implements ChannelListener, DeviceActionListener {
 
 	public static final String TAG = "wifidirectdemo";
@@ -65,8 +50,6 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 	WiFiBroadcastReceiver receiverWifi;
 	private boolean isWifiConnected;
 
-	// private TextView message_view;
-
 	public boolean isVisible = true;
 
 	/**
@@ -77,6 +60,9 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 		this.isWifiP2pEnabled = isWifiP2pEnabled;
 	}
 
+	/**
+	 * On create start running listeners and try Wi-Fi bridging if possible
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -172,15 +158,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+
+	/**
+	 * Peer discover and state transitions based on capabilities
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO: here is where Wifi Discovery should go also, so you can see
-		// peers and Android Wifi hotspots to connect to
 		switch (item.getItemId()) {
 		case R.id.atn_direct_enable:
 			if (manager != null && channel != null) {
@@ -229,12 +212,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 		DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
 		fragment.showDetails(device);
 	}
-
+	
+	/**
+	 * Try to connect through a callback to a given device
+	 */
 	@Override
 	public void connect(WifiP2pConfig config) {
-		// TOOD: Here it should be like, if WiFi hotspot use the other connect
-		// method
-
 		manager.connect(channel, config, new ActionListener() {
 
 			@Override

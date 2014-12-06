@@ -10,6 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * A password prompt for legacy connections or GO bridging connections
+ * 
+ * @author Matthew Vertescher
+ *
+ */
 @SuppressLint("ValidFragment")
 public class PromptPasswordFragment extends DialogFragment {
 
@@ -20,6 +26,11 @@ public class PromptPasswordFragment extends DialogFragment {
 	public PromptPasswordFragment() {
 	}
 
+	/**
+	 * constructor with activity and SSID for the wifi hotspot
+	 * @param activty
+	 * @param ssid
+	 */
 	public PromptPasswordFragment(WiFiDirectActivity activty, String ssid) {
 		this.activty = activty;
 		this.ssid = ssid;

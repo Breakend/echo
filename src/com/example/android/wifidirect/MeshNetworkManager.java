@@ -2,6 +2,12 @@ package com.example.android.wifidirect;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * A manager for keeping track of a mesh and handling routing
+ * 
+ * @author Peter Henderson
+ *
+ */
 public class MeshNetworkManager {
 	/**
 	 * Your routing table
@@ -9,22 +15,38 @@ public class MeshNetworkManager {
 	public static ConcurrentHashMap<String, AllEncompasingP2PClient> routingTable = new ConcurrentHashMap<String, AllEncompasingP2PClient>();
 
 	/**
-	 * Gotta know yourself
+	 * Need to know yourself
 	 */
 	private static AllEncompasingP2PClient self;
 
+	/**
+	 * Introduce a new client into the routing table
+	 * @param c
+	 */
 	public static void newClient(AllEncompasingP2PClient c) {
 		routingTable.put(c.getMac(), c);
 	}
 
+	/**
+	 * A client has left the routing table
+	 * @param c
+	 */
 	public static void clientGone(AllEncompasingP2PClient c) {
 		routingTable.remove(c.getMac());
 	}
 
+	/**
+	 * Get yourself
+	 * @return
+	 */
 	public static AllEncompasingP2PClient getSelf() {
 		return self;
 	}
 
+	/**
+	 * Set yourself
+	 * @param self
+	 */
 	public static void setSelf(AllEncompasingP2PClient self) {
 		MeshNetworkManager.self = self;
 		newClient(self);
@@ -58,19 +80,30 @@ public class MeshNetworkManager {
 				// direct link
 				return c.getIp();
 			} else if (go != null && self.getGroupOwnerMac() != c.getGroupOwnerMac() && !go.getIsDirectLink()) {
-				// TODO: need to propagate to all GO available.
+				for(AllEncompasingP2PClient aclient : routingTable.values()){
+					if(aclient.getGroupOwnerMac().equals(aclient.getMac())){
+						//try sending it to a random group owner
+						//can also expand this to all group owners
+						return aclient.getIp();
+					}
+				}
+				//no other group owners, don't know who to send it to
 				return "0.0.0.0";
 			}
 		} else if (go != null) { // I am not the group owner - need to sent it to my GO
 			return Configuration.GO_IP;
 		}
 
+		//Will drop the packet
 		return "0.0.0.0";
 
 	}
 
+	/**
+	 * Serialize the routing table, one serialized AllEncompasingP2PClient per line
+	 * @return
+	 */
 	public static byte[] serializeRoutingTable() {
-		// TODO: this to do the hello packet stuff
 		StringBuilder serialized = new StringBuilder();
 
 		for (AllEncompasingP2PClient v : routingTable.values()) {
@@ -81,6 +114,10 @@ public class MeshNetworkManager {
 		return serialized.toString().getBytes();
 	}
 
+	/**
+	 * De serialize a routing table and populate the existing one with the data
+	 * @param rtable
+	 */
 	public static void deserializeRoutingTableAndAdd(byte[] rtable) {
 		String rstring = new String(rtable);
 

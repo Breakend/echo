@@ -16,6 +16,12 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Used for bridging or legacy wifi connections
+ * 
+ * @author Matthew Vertescher
+ *
+ */
 public class WiFiBroadcastReceiver extends BroadcastReceiver {
 
 	private WifiManager wifiManager;
@@ -31,7 +37,9 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 		this.isWifiConnected = isWifiConnected;
 	}
 
-	// This method call when number of wifi connections changed
+	/**
+	 * This method call when number of wifi connections changed
+	 */
 	public void onReceive(Context context, Intent intent) {
 
 		String action = intent.getAction();

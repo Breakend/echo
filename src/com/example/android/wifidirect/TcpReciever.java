@@ -7,11 +7,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Receives packets on a server socket threads and enqueues them to a receiver runner
+ * 
+ * @author Matthew Vertescher
+ *
+ */
 public class TcpReciever implements Runnable {
 
 	private ServerSocket serverSocket;
 	private ConcurrentLinkedQueue<Packet> packetQueue;
 
+	/**
+	 * Constructor with the queue
+	 * @param port
+	 * @param queue
+	 */
 	public TcpReciever(int port, ConcurrentLinkedQueue<Packet> queue) {
 		try {
 			this.serverSocket = new ServerSocket(port);
@@ -22,6 +33,9 @@ public class TcpReciever implements Runnable {
 		this.packetQueue = queue;
 	}
 
+	/**
+	 * Thread runner
+	 */
 	@Override
 	public void run() {
 		Socket socket;

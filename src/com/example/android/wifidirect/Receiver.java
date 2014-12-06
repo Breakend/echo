@@ -4,24 +4,55 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import android.widget.Toast;
 
+/**
+ * The main receiver class
+ * @author Matthew Vertescher
+ * @author Peter Henderson
+ */
 public class Receiver implements Runnable {
 
+	/**
+	 * Flag if the receiver has been running to prevent overzealous thread spawning
+	 */
 	public static boolean running = false;
+	
+	/**
+	 * A ref to the activity
+	 */
 	static WiFiDirectActivity activity;
 
+	/**
+	 * Constructor with activity
+	 * @param a
+	 */
 	public Receiver(WiFiDirectActivity a) {
 		Receiver.activity = a;
 		running = true;
 	}
 
+	/** 
+	 * Main thread runner
+	 */
 	public void run() {
+		/*
+		 * A queue for received packets
+		 */
 		ConcurrentLinkedQueue<Packet> packetQueue = new ConcurrentLinkedQueue<Packet>();
 
+		/*
+		 * Receiver thread 
+		 */
 		new Thread(new TcpReciever(Configuration.RECEIVE_PORT, packetQueue)).start();
 
 		Packet p;
 
+		/*
+		 * Keep going through packets
+		 */
 		while (true) {
+			/*
+			 * If the queue is empty, sleep to give up CPU cycles
+			 */
 			while (packetQueue.isEmpty()) {
 				try {
 					Thread.sleep(2000);
@@ -30,9 +61,15 @@ public class Receiver implements Runnable {
 				}
 			}
 
+			/*
+			 * Pop a packet off the queue
+			 */
 			p = packetQueue.remove();
 
-			// System.out.println("Packet :" + p.toString());
+
+			/*
+			 * If it's a hello, this is special and need to go through the connection mechanism for any node receiving this
+			 */
 			if (p.getType().equals(Packet.TYPE.HELLO)) {
 				// Put it in your routing table
 				for (AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()) {
@@ -58,12 +95,14 @@ public class Receiver implements Runnable {
 			} else {
 				// If you're the intended target for a non hello message
 				if (p.getMac().equals(MeshNetworkManager.getSelf().getMac())) {
+					//if we get a hello ack populate the table
 					if (p.getType().equals(Packet.TYPE.HELLO_ACK)) {
 						MeshNetworkManager.deserializeRoutingTableAndAdd(p.getData());
 						MeshNetworkManager.getSelf().setGroupOwnerMac(p.getSenderMac());
 						somebodyJoined(p.getSenderMac());
 						updatePeerList();
 					} else if (p.getType().equals(Packet.TYPE.UPDATE)) {
+						//if it's an update, add to the table
 						String emb_mac = Packet.getMacBytesAsString(p.getData(), 0);
 						MeshNetworkManager.routingTable.put(emb_mac,
 								new AllEncompasingP2PClient(emb_mac, p.getSenderIP(), p.getMac(), MeshNetworkManager
@@ -85,6 +124,8 @@ public class Receiver implements Runnable {
 						updatePeerList();
 
 					} else if (p.getType().equals(Packet.TYPE.MESSAGE)) {
+						//If it's a message display the message and update the table if they're not there 
+						// for whatever reason
 						final String message = p.getSenderMac() + " says:\n" + new String(p.getData());
 						final String msg = new String(p.getData());
 						final String name = p.getSenderMac();
@@ -113,7 +154,7 @@ public class Receiver implements Runnable {
 						updatePeerList();
 					}
 				} else {
-					// otherwise forward it
+					// otherwise forward it if you're not the recipient
 					int ttl = p.getTtl();
 					// Have a ttl so that they don't bounce around forever
 					ttl--;
@@ -127,6 +168,10 @@ public class Receiver implements Runnable {
 		}
 	}
 
+	/**
+	 * GUI thread to send somebody joined notification
+	 * @param smac
+	 */
 	public static void somebodyJoined(String smac) {
 
 		final String message;
@@ -146,6 +191,10 @@ public class Receiver implements Runnable {
 		});
 	}
 
+	/**
+	 * Somebody left notification on the UI thread
+	 * @param smac
+	 */
 	public static void somebodyLeft(String smac) {
 
 		final String message;
@@ -165,6 +214,9 @@ public class Receiver implements Runnable {
 		});
 	}
 
+	/**
+	 * Update the list of peers on the front page
+	 */
 	public static void updatePeerList() {
 		if (activity == null)
 			return;

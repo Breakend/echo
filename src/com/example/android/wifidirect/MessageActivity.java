@@ -7,11 +7,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Activity for the group chat view
+ * @author Peter Henderson
+ *
+ */
 public class MessageActivity extends Activity {
 	public static AllEncompasingP2PClient RECIPIENT = null;
 
 	private static TextView messageView;
 
+	/**
+	 * Add appropriate listeners on creation
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +38,7 @@ public class MessageActivity extends Activity {
 				addMessage("This phone", msgStr);
 				message.setText("");
 
-				// Send to other clients
+				// Send to other clients as a group chat message
 				for (AllEncompasingP2PClient c : MeshNetworkManager.routingTable.values()) {
 					if (c.getMac().equals(MeshNetworkManager.getSelf().getMac()))
 						continue;
@@ -42,9 +50,8 @@ public class MessageActivity extends Activity {
 		});
 	}
 
-	/*
-	 * This could probably be moved out of here, but for consistency, it is
-	 * staying.
+	/**
+	 * Add a message to the view
 	 */
 	public static void addMessage(String from, String text) {
 		

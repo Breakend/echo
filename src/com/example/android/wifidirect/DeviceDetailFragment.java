@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.wifidirect;
 
 import java.io.File;
@@ -48,16 +32,18 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 /**
  * A fragment that manages a particular peer and allows interaction with device
  * i.e. setting up network connection and transferring data.
+ * 
+ * NOTE: much of this was taken from the Android example on P2P networking
  */
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
-	public static final String IP_SERVER = "192.168.49.1";
-
-	protected static final int CHOOSE_FILE_RESULT_CODE = 20;
 	private static View mContentView = null;
 	private WifiP2pDevice device;
 	ProgressDialog progressDialog = null;
 
+	/**
+	 * Update who is in the chat from the routing table
+	 */
 	public static void updateGroupChatMembersMessage() {
 		TextView view = (TextView) mContentView.findViewById(R.id.device_address);
 		if (view != null) {
@@ -69,11 +55,17 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		}
 	}
 
+	/**
+	 * Once the activity is created make sure to call the super constructor
+	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 	}
 
+	/**
+	 * Handle the view setup and callbacks
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -106,11 +98,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		return mContentView;
 	}
 
+	/**
+	 * This is mostly for debugging
+	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		// Trick to find the ip in the file /proc/net/arp
-		new String(device.deviceAddress).replace("99", "19"); // client mac fixed
 
 		// User has picked an image. Transfer it to group owner i.e peer using
 		// FileTransferService.
@@ -120,6 +112,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
 	}
 
+	/**
+	 * If you aren't the group owner and a connection has been established, send a hello packet to set up the connection
+	 */
 	@Override
 	public void onConnectionInfoAvailable(final WifiP2pInfo info) {
 		if (progressDialog != null && progressDialog.isShowing()) {
@@ -166,95 +161,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		view = (TextView) mContentView.findViewById(R.id.status_text);
 		view.setText(R.string.empty);
 		this.getView().setVisibility(View.GONE);
-	}
-
-	/**
-	 * A simple server socket that accepts connection and writes some data on
-	 * the stream.
-	 */
-	public static class ServerAsyncTask extends AsyncTask<Void, Void, String> {
-
-		private final Context context;
-		private final TextView statusText;
-
-		/**
-		 * @param context
-		 * @param statusText
-		 */
-		public ServerAsyncTask(Context context, View statusText) {
-			this.context = context;
-			this.statusText = (TextView) statusText;
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				ServerSocket serverSocket = new ServerSocket(Configuration.RECEIVE_PORT);
-				Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
-				Socket client = serverSocket.accept();
-				Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-				final File f = new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName()
-						+ "/wifip2pshared-" + System.currentTimeMillis() + ".jpg");
-
-				File dirs = new File(f.getParent());
-				if (!dirs.exists())
-					dirs.mkdirs();
-				f.createNewFile();
-
-				Log.d(WiFiDirectActivity.TAG, "server: copying files " + f.toString());
-				InputStream inputstream = client.getInputStream();
-				copyFile(inputstream, new FileOutputStream(f));
-				serverSocket.close();
-				return f.getAbsolutePath();
-			} catch (IOException e) {
-				Log.e(WiFiDirectActivity.TAG, e.getMessage());
-				return null;
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
-		@Override
-		protected void onPostExecute(String result) {
-			if (result != null) {
-				statusText.setText("File copied - " + result);
-				Intent intent = new Intent();
-				intent.setAction(android.content.Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.parse("file://" + result), "image/*");
-				context.startActivity(intent);
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see android.os.AsyncTask#onPreExecute()
-		 */
-		@Override
-		protected void onPreExecute() {
-			statusText.setText("Opening a server socket");
-		}
-
-	}
-
-	public static boolean copyFile(InputStream inputStream, OutputStream out) {
-		byte buf[] = new byte[1024];
-		int len;
-		try {
-			while ((len = inputStream.read(buf)) != -1) {
-				out.write(buf, 0, len);
-
-			}
-			out.close();
-			inputStream.close();
-		} catch (IOException e) {
-			Log.d(WiFiDirectActivity.TAG, e.toString());
-			return false;
-		}
-		return true;
 	}
 
 }

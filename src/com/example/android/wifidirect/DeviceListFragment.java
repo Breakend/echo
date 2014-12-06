@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.wifidirect;
 
 import java.util.ArrayList;
@@ -39,20 +23,31 @@ import android.widget.TextView;
 /**
  * A ListFragment that displays available peers on discovery and requests the
  * parent activity to handle user interaction events
+ * 
+ * NOTE: much of this was taken from the example in the Android P2P networking library
  */
 public class DeviceListFragment extends ListFragment implements PeerListListener {
 
+	/**
+	 * A list of Wi-Fi Direct enabled ppers
+	 */
 	private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	ProgressDialog progressDialog = null;
 	View mContentView = null;
 	private WifiP2pDevice device;
 
+	/**
+	 * Once the activity is created make sure that an adapter is fit to the fragment to update on finding new peers
+	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 	}
 
+	/**
+	 * Inflate the devices list view 
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mContentView = inflater.inflate(R.layout.device_list, null);
@@ -66,6 +61,11 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 		return device;
 	}
 
+	/**
+	 * For a given device see if it's connected to a group, pending a connection, etc.
+	 * @param deviceStatus
+	 * @return
+	 */
 	private static String getDeviceStatus(int deviceStatus) {
 		Log.d(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
 		switch (deviceStatus) {
@@ -150,6 +150,9 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 		view.setText(getDeviceStatus(device.status));
 	}
 
+	/**
+	 * Callback for async peer searching
+	 */
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peerList) {
 		if (progressDialog != null && progressDialog.isShowing()) {
@@ -165,11 +168,17 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
 	}
 
+	/**
+	 * Remove the peers
+	 */
 	public void clearPeers() {
 		peers.clear();
 		((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
 	}
 
+	/**
+	 * Callback to bring up searching modal
+	 */
 	public void onInitiateDiscovery() {
 		if (progressDialog != null && progressDialog.isShowing()) {
 			progressDialog.dismiss();
