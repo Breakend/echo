@@ -30,7 +30,7 @@ import com.ecse414.android.echo.ui.PromptPasswordFragment;
 import com.ecse414.android.echo.ui.DeviceListFragment.DeviceActionListener;
 import com.ecse414.android.echo.wifi.WiFiBroadcastReceiver;
 import com.ecse414.android.echo.wifi.WiFiDirectBroadcastReceiver;
-import com.example.android.wifidirect.R;
+import com.ecse414.android.echo.R;
 
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available

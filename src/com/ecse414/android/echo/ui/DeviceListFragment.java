@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecse414.android.echo.WiFiDirectActivity;
-import com.example.android.wifidirect.R;
+import com.ecse414.android.echo.R;
 
 import android.app.ListFragment;
 import android.app.ProgressDialog;

@@ -1,4 +1,4 @@
-package com.ecse414.android.echo.tcp;
+package com.ecse414.android.echo.router.tcp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import com.ecse414.android.echo.MessageActivity;
 import com.ecse414.android.echo.WiFiDirectActivity;
 import com.ecse414.android.echo.config.Configuration;
-import com.ecse414.android.echo.tcp.TcpReciever;
+import com.ecse414.android.echo.router.tcp.TcpReciever;
 import com.ecse414.android.echo.ui.DeviceDetailFragment;
 
 import android.widget.Toast;

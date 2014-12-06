@@ -24,7 +24,7 @@ import com.ecse414.android.echo.router.Receiver;
 import com.ecse414.android.echo.router.Sender;
 import com.ecse414.android.echo.ui.DeviceDetailFragment;
 import com.ecse414.android.echo.ui.DeviceListFragment;
-import com.example.android.wifidirect.R;
+import com.ecse414.android.echo.R;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

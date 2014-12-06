@@ -23,7 +23,7 @@ import com.ecse414.android.echo.router.Packet;
 import com.ecse414.android.echo.router.Sender;
 import com.ecse414.android.echo.ui.DeviceListFragment.DeviceActionListener;
 import com.ecse414.android.echo.wifi.WiFiDirectBroadcastReceiver;
-import com.example.android.wifidirect.R;
+import com.ecse414.android.echo.R;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device
