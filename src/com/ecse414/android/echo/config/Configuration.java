@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.config;
 
 /**
  * Contains configuration settings related to the WiFi Direct implementation

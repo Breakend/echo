@@ -8,7 +8,7 @@
         android:id="@+id/frag_list"
         android:layout_width="match_parent"
         android:layout_height="164dp"
-        class="com.example.android.wifidirect.DeviceListFragment" >
+        class="com.ecse414.android.echo.ui.DeviceListFragment" >
 
         <!-- Preview: layout=@layout/row_devices -->
     </fragment>
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.95"
-        class="com.example.android.wifidirect.DeviceDetailFragment" >
+        class="com.ecse414.android.echo.ui.DeviceDetailFragment" >
 
         <!-- Preview: layout=@layout/device_detail -->
     </fragment>

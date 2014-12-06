@@ -10,14 +10,14 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <fragment
-            class="com.example.android.wifidirect.DeviceListFragment"
+            class="com.ecse414.android.echo.ui.DeviceListFragment"
             android:id="@+id/frag_list"
             android:layout_width="@dimen/phone_list_height"
             android:layout_height="match_parent">
             <!-- Preview: layout=@layout/row_devices -->
         </fragment>
         <fragment
-            class="com.example.android.wifidirect.DeviceDetailFragment"
+            class="com.ecse414.android.echo.ui.DeviceDetailFragment"
             android:id="@+id/frag_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

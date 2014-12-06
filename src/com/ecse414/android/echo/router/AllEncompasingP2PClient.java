@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.router;
 
 /**
  * This is an alternative representation the Android P2P library's WiFiP2PDevice class

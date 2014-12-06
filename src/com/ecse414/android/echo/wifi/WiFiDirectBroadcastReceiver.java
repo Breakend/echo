@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.wifi;
+
+import com.ecse414.android.echo.WiFiDirectActivity;
+import com.ecse414.android.echo.config.Configuration;
+import com.ecse414.android.echo.router.AllEncompasingP2PClient;
+import com.ecse414.android.echo.router.MeshNetworkManager;
+import com.ecse414.android.echo.router.Receiver;
+import com.ecse414.android.echo.router.Sender;
+import com.ecse414.android.echo.ui.DeviceDetailFragment;
+import com.ecse414.android.echo.ui.DeviceListFragment;
+import com.example.android.wifidirect.R;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

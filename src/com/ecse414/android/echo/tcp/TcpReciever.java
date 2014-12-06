@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.tcp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.ecse414.android.echo.router.Packet;
 
 /**
  * Receives packets on a server socket threads and enqueues them to a receiver runner

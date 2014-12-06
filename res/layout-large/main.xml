@@ -4,12 +4,12 @@
     android:layout_height="fill_parent">
     <LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout1"
         android:layout_height="fill_parent" android:orientation="horizontal">
-        <fragment class="com.example.android.wifidirect.DeviceListFragment"
+        <fragment class="com.ecse414.android.echo.ui.DeviceListFragment"
             android:id="@+id/frag_list" android:layout_width="@dimen/tablet_list_width"
             android:layout_height="match_parent">
             <!-- Preview: layout=@layout/row_devices -->
         </fragment>
-        <fragment class="com.example.android.wifidirect.DeviceDetailFragment"
+        <fragment  class="com.ecse414.android.echo.ui.DeviceDetailFragment"
             android:id="@+id/frag_detail" android:layout_width="match_parent"
             android:layout_height="match_parent">
             <!-- Preview: layout=@layout/device_detail -->

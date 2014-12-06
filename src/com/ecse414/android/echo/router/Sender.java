@@ -1,6 +1,9 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.router;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.ecse414.android.echo.config.Configuration;
+import com.ecse414.android.echo.tcp.TcpSender;
 
 /**
  * Responsible for sending all packets that appear in the queue

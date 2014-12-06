@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -23,7 +23,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
+import com.ecse414.android.echo.config.Configuration;
+import com.ecse414.android.echo.ui.DeviceDetailFragment;
+import com.ecse414.android.echo.ui.DeviceListFragment;
+import com.ecse414.android.echo.ui.PromptPasswordFragment;
+import com.ecse414.android.echo.ui.DeviceListFragment.DeviceActionListener;
+import com.ecse414.android.echo.wifi.WiFiBroadcastReceiver;
+import com.ecse414.android.echo.wifi.WiFiDirectBroadcastReceiver;
+import com.example.android.wifidirect.R;
 
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available

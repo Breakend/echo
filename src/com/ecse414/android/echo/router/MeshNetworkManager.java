@@ -1,6 +1,8 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.router;
 
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.ecse414.android.echo.config.Configuration;
 
 /**
  * A manager for keeping track of a mesh and handling routing

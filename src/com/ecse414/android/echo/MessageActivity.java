@@ -1,4 +1,11 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo;
+
+import com.ecse414.android.echo.router.AllEncompasingP2PClient;
+import com.ecse414.android.echo.router.MeshNetworkManager;
+import com.ecse414.android.echo.router.Packet;
+import com.ecse414.android.echo.router.Sender;
+import com.ecse414.android.echo.wifi.WiFiDirectBroadcastReceiver;
+import com.example.android.wifidirect.R;
 
 import android.app.Activity;
 import android.os.Bundle;

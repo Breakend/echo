@@ -1,10 +1,17 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.wifi;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.List;
+
+import com.ecse414.android.echo.WiFiDirectActivity;
+import com.ecse414.android.echo.config.Configuration;
+import com.ecse414.android.echo.router.AllEncompasingP2PClient;
+import com.ecse414.android.echo.router.MeshNetworkManager;
+import com.ecse414.android.echo.router.Receiver;
+import com.ecse414.android.echo.router.Sender;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.router;
 
 /**
  * The echo packet structure

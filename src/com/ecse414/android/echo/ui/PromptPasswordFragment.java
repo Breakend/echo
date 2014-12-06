@@ -1,4 +1,7 @@
-package com.example.android.wifidirect;
+package com.ecse414.android.echo.ui;
+
+import com.ecse414.android.echo.WiFiDirectActivity;
+import com.example.android.wifidirect.R;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
